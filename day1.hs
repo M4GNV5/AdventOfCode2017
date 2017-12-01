@@ -1,19 +1,11 @@
 import Data.List
-import Data.Maybe
 import Data.Char
 
-solveCaptcha d1 d2          = sum $ catMaybes $ zipWith matchesDigit d1 d2
-    where
-        matchesDigit x y    = if x == y
-            then Just x
-            else Nothing
+solveCaptcha list1 list2    = sum $ map (digitToInt . fst) $ filter (uncurry (==)) $ zip list1 list2
 
-solveCaptcha1 str           = solveCaptcha digits (tail digits)
-    where
-        digits              = map digitToInt (str ++ [head str])
+solveCaptcha1 str           = solveCaptcha str (tail str ++ [head str])
 
-solveCaptcha2 str           = solveCaptcha digits displacedDigits
+solveCaptcha2 str           = solveCaptcha str displacedStr
     where
-        digits              = map digitToInt str
-        halfLen             = div (length digits) 2
-        displacedDigits     = drop halfLen digits ++ take halfLen digits
+        halfLen             = div (length str) 2
+        displacedStr        = drop halfLen str ++ take halfLen str
