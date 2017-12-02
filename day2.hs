@@ -1,3 +1,5 @@
+import Control.Monad
+
 checksum f                  = sum . map (f . (map read) . words) . lines
 
 checksum1                   = checksum (liftM2 (-) maximum minimum)
