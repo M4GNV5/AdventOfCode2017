@@ -1,8 +1,10 @@
-checksum str f              = sum $ map (f . (map read) . words) (lines str)
+import Control.Monad
 
-checksum1 str               = checksum str (\x -> (maximum x) - (minimum x))
+checksum f                  = sum . map (f . (map read) . words) . lines
 
-checksum2 str               = checksum str firstEvenDivision
+checksum1                   = checksum (liftM2 (-) maximum minimum)
+
+checksum2                   = checksum firstEvenDivision 
     where
         isEvenDiv (x,y)     = y == 0 && x /= 1
-        firstEvenDivision x = fst $ head $ filter isEvenDiv $ concat $ map (\y -> map (divMod y) x) x
+        firstEvenDivision   = fst . head . filter isEvenDiv . join . (map =<< flip (map . divMod))
